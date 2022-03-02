@@ -1,0 +1,26 @@
+{% extends 'navbar/navbar_base.html' %}
+{% block navbar_nav %}
+<li class="nav-item">
+  <a class="nav-link" href="#">Find Jobs</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="#">Applications</a>
+</li>
+<li class="nav-item dropdown">
+  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Exam
+  </a>
+  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+    <a class="dropdown-item" href="#">Give Exam</a>
+    <a class="dropdown-item" href="#">View Results</a>
+  </div>
+</li>
+{% endblock %}
+{% block navbar_text %}
+<li class="nav-item">
+  <a class="nav-link" href="#">My Profile</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="#">Logout</a>
+</li>
+{% endblock %}

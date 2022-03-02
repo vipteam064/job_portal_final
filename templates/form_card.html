@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <div class="card my-5">
+                <h4 class="card-header text-center">
+                    {% block form_title %}{% endblock form_title %}
+                </h4>
+                <div class="card-body">
+                    {% block form %}{% endblock form %}
+                    {% if errors %}
+                    <div class="card border-danger">
+                        <div class="card-body">
+                            <h5 class="card-title">Please correct the following errors:</h5>
+                            <ul id="error_list" class="list-unstyled">
+                            {% for field in errors %}
+                                {% if field.0 == '__all__' %}
+                                <li><b>{{ field.1|join:', ' }}</b></li>
+                                {% else %}
+                                <li><b id="field_name">{{ field.0 }}</b> : {{ field.1|join:', ' }}</li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% block item_table %}
+            {% endblock item_table %}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let error_list = document.getElementById('error_list');
+        if (error_list) {
+            let fields = error_list.getElementsByTagName('li');
+            for (field of fields) {
+                let field_name = field.children.field_name.textContent;
+                let invalid_input = document.getElementById(`${field_name}_input`);
+                invalid_input.classList.add('border-danger');
+            }
+        }
+    });
+</script>
+{% endblock content %}

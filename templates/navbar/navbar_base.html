@@ -1,0 +1,37 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Jobportal</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% block navbar_nav %}{% endblock %}
+    </ul>
+    <span class="navbar-text py-0">
+      <ul class="navbar-nav ">
+        {% block navbar_text %}{% endblock %}
+      </ul>
+    </span>
+  </div>
+</nav>
+<script type="text/javascript">
+    function clear_active() {
+        let nav_items = document.querySelectorAll('.navbar>.navbar-collapse .nav-item');
+        for (nav_item of nav_items) {
+            nav_item.classList.remove('active');
+            if (nav_item.classList.contains('dropdown')) {
+                let nav_item_dropdown_items = nav_item.querySelectorAll('.dropdown-menu>.dropdown-item');
+                for (dropdown_item of nav_item_dropdown_items) {
+                    dropdown_item.classList.remove('active');
+                }
+            }
+        }
+    }
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let active_path = window.location.pathname;
+        clear_active();
+        let curr_nav_item = document.querySelector(`.navbar>.navbar-collapse .nav-link[href='${active_path}']`)
+        curr_nav_item.classList.add('active');
+    });
+</script>

@@ -1,0 +1,18 @@
+{% extends 'form_card.html' %}
+{% block form_title %}
+Change Email
+{% endblock form_title %}
+{% block form %}
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Email:</label>
+        <input id="email_input" type="email" name="email" class="form-control email mb-2" placeholder="abc@gmail.com"
+        pattern="^[\w\.\+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\.\-]+$" title="username@domain.com" required />
+    </div>
+    <div class="form-group text-center">
+        <a href="#"  class="btn sm-btn btn-warning">Cancel</a>
+        <input type="submit" class="btn sm-btn btn-success" value="Change Email" />
+    </div>
+</form>
+{% endblock form %}

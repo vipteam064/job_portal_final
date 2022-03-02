@@ -1,0 +1,31 @@
+{% extends 'form_card.html' %}
+{% block form_title %}
+Login
+{% endblock form_title %}
+{% block form %}
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label>Email:</label>
+        <input id="email_input" type="email" name="email" class="form-control email mb-2" placeholder="abc@gmail.com"
+        pattern="^[\w\.\+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\.\-]+$" title="username@domain.com" required />
+    </div>
+    <div class="form-group">
+        <label>Password:</label>
+        <input id="password_input" type="password" class="form-control password mb-2" placeholder="Enter 8 char password.."
+        name="pwd" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,128}$" title="Password must contain aleast 8 characters, one lowercase letter, one uppercase letter, one number and one special character (@$!%*?&)" required />
+        <input type="checkbox" class="mb-2" onchange="shPassword()" /> Show password
+    </div>
+    <div>
+        <a href="#">Forgot Your password?</a>
+    </div>
+    <div class="mb-4">
+        New to job portal?
+        <a href="{% url 'users:signup' %}">Sign Up</a>
+    </div>
+    <div class="form-group text-center">
+        <a href="#"  class="btn sm-btn btn-warning">Cancel</a>
+        <input type="submit" class="btn sm-btn btn-success" value="Login" />
+    </div>
+</form>
+{% endblock form %}
