@@ -15,7 +15,7 @@
     </span>
   </div>
 </nav>
-<script type="text/javascript">
+<script id="navbar_script" type="text/javascript">
     function clear_active() {
         let nav_items = document.querySelectorAll('.navbar>.navbar-collapse .nav-item');
         for (nav_item of nav_items) {
@@ -32,6 +32,8 @@
         let active_path = window.location.pathname;
         clear_active();
         let curr_nav_item = document.querySelector(`.navbar>.navbar-collapse .nav-link[href='${active_path}']`)
-        curr_nav_item.classList.add('active');
+        if (curr_nav_item) {
+            curr_nav_item.classList.add('active');
+        }
     });
 </script>

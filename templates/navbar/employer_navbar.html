@@ -39,7 +39,10 @@
 <li class="nav-item active">
   <a class="nav-link" href="#">Company Profile</a>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'users:change_password'%}">Change Password</a>
+</li>
 <li class="nav-item active">
-  <a class="nav-link" href="#">Logout</a>
+  <a class="nav-link" href="{% url 'users:logout'%}">Logout</a>
 </li>
 {% endblock %}
