@@ -1,0 +1,14 @@
+{% extends 'navbar/navbar_base.html' %}
+{% block navbar_nav %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'admin:index' %}">Admin Dashboard</a>
+</li>
+{% endblock %}
+{% block navbar_text %}
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'users:change_password'%}">Change Password</a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="{% url 'users:logout'%}">Logout</a>
+</li>
+{% endblock %}
