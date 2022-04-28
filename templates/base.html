@@ -25,13 +25,13 @@
 </head>
 <body>
     {% block nav %}
-        {% if user.role.role_name == "JOB SEEKER" %}
+        {% if user.role.role_name == 'JOB SEEKER' %}
             {% include 'navbar/job_seeker_navbar.html' %}
-        {% elif user.role.role_name == "EMPLOYER" %}
+        {% elif user.role.role_name == 'EMPLOYER' %}
             {% include 'navbar/employer_navbar.html' %}
-        {% elif user.role.role_name == "INTERVIEWER" %}
+        {% elif user.role.role_name == 'INTERVIEWER' %}
             {% include 'navbar/interviewer_navbar.html' %}
-        {% elif user.role.role_name == "ADMIN" or user.role.role_name == "STAFF" %}
+        {% elif user.role.role_name == 'ADMIN' or user.role.role_name == 'STAFF' %}
             {% include 'navbar/admin_navbar.html' %}
         {% else %}
             {% include 'navbar/visitor_navbar.html' %}

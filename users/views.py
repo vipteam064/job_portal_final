@@ -8,7 +8,9 @@ from .models import *
 # Create your views here.
 @user_passes_test(lambda user: not user.is_authenticated, login_url='/', redirect_field_name=None)
 def signup_view(request):
-    context = {}
+    context = {
+        'form': {'role': request.GET.get('role'), },
+    }
     if request.method == 'POST':
         role_input = request.POST.get('role')
         email_input = request.POST.get('email')

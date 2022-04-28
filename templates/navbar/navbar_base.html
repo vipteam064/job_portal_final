@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Jobportal</a>
+  <a class="navbar-brand" href="{% url 'home' %}">Jobportal</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -16,7 +16,10 @@
   </div>
 </nav>
 <script id="navbar_script" type="text/javascript">
-    function clear_active() {
+    // highlighting current url as active in navbar
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let active_path = window.location.pathname;
+        // clearing active nav-items
         let nav_items = document.querySelectorAll('.navbar>.navbar-collapse .nav-item');
         for (nav_item of nav_items) {
             nav_item.classList.remove('active');
@@ -27,10 +30,7 @@
                 }
             }
         }
-    }
-    document.addEventListener('DOMContentLoaded', (event) => {
-        let active_path = window.location.pathname;
-        clear_active();
+        // highlighting the nav-item
         let curr_nav_item = document.querySelector(`.navbar>.navbar-collapse .nav-link[href='${active_path}']`)
         if (curr_nav_item) {
             curr_nav_item.classList.add('active');

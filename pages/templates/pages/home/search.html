@@ -1,5 +1,180 @@
-<div class="row" style="background-color: pink;">
-    <div class="col-5" style="background-color: blue;">hello</div>
-    <div class="col-5" style="background-color: orange;">hello</div>
-    <div class="col-2" style="background-color: red;">hello</div>
-</div>
+<form id="search_form" onsubmit="validate_form()">
+    <div class="row my-3">
+        <div class="col-12 col-md-5">
+            <div class="input-group">
+                <input id="search_keyword_input" type="text" name="search_keyword" value="{{ form.search_keyword }}" placeholder="Job title or skill" class="form-control" style="border-right: none;"/>
+                <div class="input-group-append">
+                    <span class="input-group-text" style="background-color: initial; border-left: none;">
+                        <i class="bi-search"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 my-2 col-md-5 my-md-0">
+            <div class="input-group">
+                <input id="search_location_input" type="text" name="search_location" value="{{ form.search_location }}" placeholder="City or state" class="form-control" style="border-right: none;"/>
+                <div class="input-group-append">
+                    <span class="input-group-text" style="background-color: initial; border-left: none;">
+                        <i class="bi-geo-alt-fill"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-2">
+            <input id="search_button" type="submit" value="Search" class="btn btn-block btn-outline-primary">
+        </div>
+        <div id="search_input_required_message" class="col-12 mt-2 text-danger text-center d-none">
+            Please provide job title, skill, city or state to perform search.
+        </div>
+    </div>
+    {% if job_search_result %}
+    <div id="search_filters" class="row">
+        <div class="col-6 col-md-3">
+            <select id="min_salary_input" class="custom-select" name="min_salary" oninput="check_salary()">
+                <option value="" selected hidden disabled>Min salary</option>
+                <option value="10000">10000</option>
+                <option value="15000">15000</option>
+                <option value="20000">20000</option>
+                <option value="25000">25000</option>
+                <option value="30000">30000</option>
+                <option value="35000">35000</option>
+                <option value="40000">40000</option>
+                <option value="45000">45000</option>
+                <option value="50000">50000</option>
+            </select>
+        </div>
+        <div class="col-6 col-md-3">
+            <select id="max_salary_input" class="custom-select" name="max_salary" oninput="check_salary()">
+                <option value="" selected hidden disabled>Max salary</option>
+                <option value="20000">20000</option>
+                <option value="25000">25000</option>
+                <option value="30000">30000</option>
+                <option value="35000">35000</option>
+                <option value="40000">40000</option>
+                <option value="45000">45000</option>
+                <option value="50000">50000</option>
+                <option value="55000">55000</option>
+                <option value="60000">60000</option>
+                <option value="65000">65000</option>
+                <option value="70000">70000</option>
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3 mt-md-0">
+            <select id="min_experience_input" class="custom-select" name="min_experience" oninput="check_experience()">
+                <option value="" selected hidden disabled>Min experience</option>
+                <option value="0">Fresher</option>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="4">4 years</option>
+                <option value="5">5 years</option>
+                <option value="6">6 years</option>
+                <option value="7">7 years</option>
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3 mt-md-0">
+            <select id="max_experience_input" class="custom-select" name="max_experience" oninput="check_experience()">
+                <option value="" selected hidden disabled>Max experience</option>
+                <option value="1">1 year</option>
+                <option value="2">2 years</option>
+                <option value="4">4 years</option>
+                <option value="5">5 years</option>
+                <option value="6">6 years</option>
+                <option value="7">7 years</option>
+                <option value="8">8 years</option>
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3">
+            <select id="is_remote_input" class="custom-select" name="is_remote">
+                <option value="" selected hidden disabled>Remote work?</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3">
+            <select id="job_type_input" class="custom-select" name="job_type">
+                <option value="" selected hidden disabled>Job type</option>
+                <option value="0">Part-time</option>
+                <option value="1">Full-time</option>
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3">
+            <select id="industry_input" class="custom-select" name="industry">
+                <option value="" selected hidden disabled>Industry</option>
+                {% for industry in industries %}
+                <option value="{{industry.id}}">{{industry.industry_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-6 mt-2 col-md-3">
+            <select id="created_date_input" class="custom-select" name="created_date">
+                <option value="" selected hidden disabled>Date posted</option>
+                <option value="1">Last 24 hours</option>
+                <option value="3">Last 3 days</option>
+                <option value="7">Last 7 days</option>
+                <option value="15">Last 15 days</option>
+            </select>
+        </div>
+        <div class="col-12 mt-2">
+            <input id="clear_button" type="submit" value="Clear Filters" class="btn btn-block btn-outline-dark" onclick="clear_filters()">
+        </div>
+    </div>
+    {% endif %}
+</form>
+<hr class="clearfix w-100">
+<script id="search_script" type="text/javascript">
+    var search_keyword_input = document.getElementById('search_keyword_input');
+    var search_location_input = document.getElementById('search_location_input');
+    var search_input_required_message = document.getElementById('search_input_required_message');
+    var search_filters = document.getElementById('search_filters');
+    if (search_filters) {
+        var min_salary_input = search_filters.querySelector('#min_salary_input');
+        var max_salary_input = search_filters.querySelector('#max_salary_input');
+        var min_experience_input = search_filters.querySelector('#min_experience_input');
+        var max_experience_input = search_filters.querySelector('#max_experience_input');
+    }
+    function validate_form() {
+        if (search_keyword_input.value === '' && search_location_input.value === '') {
+            event.preventDefault();
+            event.stopPropagation();
+            search_input_required_message.classList.remove('d-none');
+        }
+    }
+    function check_salary() {
+        if (min_salary_input.value && max_salary_input.value && min_salary_input.value > max_salary_input.value) {
+            min_salary_input.setCustomValidity('Minimum salary should be less than or equal to maximum salary.');
+        }
+        else {
+            min_salary_input.setCustomValidity('');
+        }
+    }
+    function check_experience() {
+        if (min_experience_input.value && max_experience_input.value && min_experience_input.value > max_experience_input.value) {
+            min_experience_input.setCustomValidity('Minimum experience should be less than or equal to maximum experience.');
+        }
+        else {
+            min_experience_input.setCustomValidity('');
+        }
+    }
+    function clear_filters() {
+        let search_form = document.getElementById('search_form');
+        for (element of search_form.elements) {
+            if (element.tagName == 'SELECT') {
+                element.value = '';
+            }
+        }
+    }
+    {% if form.search_filters %}
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // autofilling filters
+        if (search_filters) {
+            let filter_inputs = search_filters.querySelectorAll('select');
+            let filter_values = {{ form.search_filters|safe }};
+            for (filter_input of filter_inputs) {
+                if (filter_values[filter_input.name]) {
+                    filter_input.value = filter_values[filter_input.name];
+                }
+            }
+        }
+    });
+    {% endif %}
+</script>
