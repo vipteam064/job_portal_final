@@ -28,7 +28,7 @@ TIMEZONE_API_TOKEN = 'aBzYtqUVwzuDBOYoCmKb'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -58,6 +58,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'job_portal_final.urls'
+LOGIN_URL = '/users/login'
 
 TEMPLATES = [
     {
@@ -104,10 +105,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
+        'NAME': 'job_portal_final.custom_password_validators.MaximumLengthValidator',
+    },
+    {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'job_portal_final.custom_password_validators.NumberValidator',
+    },
+    {
+        'NAME': 'job_portal_final.custom_password_validators.UppercaseValidator',
+    },
+    {
+        'NAME': 'job_portal_final.custom_password_validators.LowercaseValidator',
+    },
+    {
+        'NAME': 'job_portal_final.custom_password_validators.SymbolValidator',
     },
 ]
 
@@ -146,6 +159,7 @@ EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'vipteam064@gmail.com'
 EMAIL_HOST_PASSWORD = 'we@are@VIP'
+DEFAULT_FROM_EMAIL = 'vipteam064@gmail.com'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

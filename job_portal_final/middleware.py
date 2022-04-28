@@ -22,14 +22,15 @@ class TimezoneMiddleware:
             timezone.activate(pytz.timezone(user_timezone))
         else:
             try:
-                timezoneapi_response = requests.get('https://timezoneapi.io/api/ip/?token='.format(token=TIMEZONE_API_TOKEN))
+                timezoneapi_response = requests.get('https://timezoneapi.io/api/ip/?token={token}'.format(token=TIMEZONE_API_TOKEN))
                 timezoneapi_response.raise_for_status()
                 timezoneapi_response_json = timezoneapi_response.json()
                 user_timezone = timezoneapi_response_json['data']['timezone']['id']
                 request.session['user_timezone'] = user_timezone
                 timezone.activate(pytz.timezone(user_timezone))
-            except:
+            except requests.exceptions.HTTPError as e:
                 timezone.deactivate()
+                print(e)
 
     def __call__(self, request):
         self.process_request(request)

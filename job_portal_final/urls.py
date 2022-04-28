@@ -19,6 +19,6 @@ from pages import views as pages_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('icons-test', pages_views.icons_test_view, name='icons_test'),
+    path('', pages_views.home_view, name='home'),
     path('users/', include('users.urls', namespace='users')),
 ]
