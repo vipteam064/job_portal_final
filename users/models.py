@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
-from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
 from django.core import validators
 from django.core.exceptions import ValidationError
@@ -14,9 +13,7 @@ class Role_master(models.Model):
         unique=True,
         validators=[
             validators.RegexValidator(
-                regex=r'^(?! )(?:[a-zA-Z]| (?! ))+(?<! )$',
-                message="Role name can contain letters and spaces."
-            ),
+                regex=r'^(?! )(?:[a-zA-Z]| (?! ))+(?<! )$')
         ],
         error_messages={
             'unique': _('A role with that name already exists.'),
@@ -32,6 +29,7 @@ class User_accountManager(BaseUserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
             raise ValueError('The given email must be set.')
+        email = self.normalize_email(email)
         user = self.model(email=email, **extra_fields)
         user.password = make_password(password)
         user.save(using=self._db)
@@ -43,16 +41,15 @@ class User_accountManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email, password=None, **extra_fields):
-        admin_role = Role_master.objects.get(role_name='ADMIN') # make sure ADMIN role exists
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('role', admin_role)
+        extra_fields.setdefault(
+            'role', Role_master.objects.get(role_name='ADMIN'))
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
-        if extra_fields.get('role') is not admin_role:
-            raise ValueError('Superuser must belong to ADMIN role.')
+
         return self.create_user(email, password, **extra_fields)
 
 class User_account(AbstractBaseUser, PermissionsMixin):
@@ -115,15 +112,15 @@ class User_account(AbstractBaseUser, PermissionsMixin):
                     error_dict['is_superuser'] = 'Invalid permissions for user belonging to role staff.'
             else:
                 if self.is_staff:
-                    error_dict['is_staff'] = 'Invalid permissions for user.'
+                    error_dict['is_staff'] = 'Invalid permissions for end user.'
                 if self.is_superuser:
-                    error_dict['is_superuser'] = 'Invalid permissions for user.'
+                    error_dict['is_superuser'] = 'Invalid permissions for end user.'
 
             # checking related_employer
             # if self.role.role_name == 'INTERVIEWER' and self.related_employer is None:
-            #     error_dict['related_employer'] = 'Related employer must be provided for user belonging interviewer role.'
+            #     error_dict['related_employer'] = 'Related employer must be provided for user of interviewer role.'
             # elif self.role.role_name != 'INTERVIEWER' and self.related_employer is not None:
-            #     error_dict['related_employer'] = 'Related employer can only be set for user belonging interviewer role.'
+            #     error_dict['related_employer'] = 'Related employer can only be set for user of interviewer role.'
 
         raise ValidationError(error_dict)
 
@@ -131,4 +128,4 @@ class User_account(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):
-        return self.email.lower()
+        return str(self.email.lower())

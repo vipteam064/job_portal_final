@@ -9,29 +9,19 @@
                 </h4>
                 <div class="card-body">
                     {% block form %}{% endblock form %}
-                    {% if errors or form.errors %}
-                    <div class="card border-danger mt-3">
+                    {% if errors %}
+                    <div class="card border-danger">
                         <div class="card-body">
                             <h5 class="card-title">Please correct the following errors:</h5>
-                            {% block error_list %}
                             <ul id="error_list" class="list-unstyled">
                             {% for field in errors %}
                                 {% if field.0 == '__all__' %}
-                                {% for error in field.1 %}
-                                <li data-all="true"><b>{{ error }}</b></li>
-                                {% endfor %}
+                                <li><b>{{ field.1|join:', ' }}</b></li>
                                 {% else %}
-                                <li><b>{{ field.0 }}</b>
-                                    <ul>
-                                    {% for error in field.1 %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                    </ul>
-                                </li>
+                                <li><b id="field_name">{{ field.0 }}</b> : {{ field.1|join:', ' }}</li>
                                 {% endif %}
                             {% endfor %}
                             </ul>
-                            {% endblock error_list %}
                         </div>
                     </div>
                     {% endif %}
@@ -42,32 +32,17 @@
         </div>
     </div>
 </div>
-{% endblock content %}
-{% block script %}
-{{ block.super }}
-document.addEventListener('DOMContentLoaded', (event) => {
-    error_list = (typeof(error_list) == 'undefined')? document.getElementById('error_list') : error_list;
-    if (error_list) {
-        let fields = error_list.children;
-        for (field of fields) {
-            if (field.dataset.all) {
-                // for __all__
-                let all_inputs = document.querySelectorAll('input, select, textarea');
-                for (input of all_inputs) {
-                    if (!['hidden', 'button', 'image', 'submit', 'reset', 'search'].includes(input.type)) {
-                        input.classList.add('is-invalid');
-                    }
-                }
-                break;
-            }
-            else {
-                let field_name = field.firstChild.textContent;
-                let invalid_inputs = document.querySelectorAll(`input[name=${field_name}], select[name=${field_name}], textarea[name=${field_name}]`);
-                for (invalid_input of invalid_inputs) {
-                    invalid_input.classList.add('is-invalid');
-                }
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', (event) => {
+        let error_list = document.getElementById('error_list');
+        if (error_list) {
+            let fields = error_list.getElementsByTagName('li');
+            for (field of fields) {
+                let field_name = field.children.field_name.textContent;
+                let invalid_input = document.getElementById(`${field_name}_input`);
+                invalid_input.classList.add('border-danger');
             }
         }
-    }
-});
-{% endblock script %}
+    });
+</script>
+{% endblock content %}
