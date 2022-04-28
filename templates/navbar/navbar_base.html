@@ -15,11 +15,16 @@
     </span>
   </div>
 </nav>
+<<<<<<< HEAD
 <script id="navbar_script" type="text/javascript">
     // highlighting current url as active in navbar
     document.addEventListener('DOMContentLoaded', (event) => {
         let active_path = window.location.pathname;
         // clearing active nav-items
+=======
+<script type="text/javascript">
+    function clear_active() {
+>>>>>>> parent of 62c95ff... fourth commit
         let nav_items = document.querySelectorAll('.navbar>.navbar-collapse .nav-item');
         for (nav_item of nav_items) {
             nav_item.classList.remove('active');
@@ -32,8 +37,6 @@
         }
         // highlighting the nav-item
         let curr_nav_item = document.querySelector(`.navbar>.navbar-collapse .nav-link[href='${active_path}']`)
-        if (curr_nav_item) {
-            curr_nav_item.classList.add('active');
-        }
+        curr_nav_item.classList.add('active');
     });
 </script>

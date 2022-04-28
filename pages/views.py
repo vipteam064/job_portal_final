@@ -32,8 +32,9 @@ def job_search(request):
     return job_search_context
 
 # Create your views here.
-def home_view(request):
+def icons_test_view(request):
     context = {}
+<<<<<<< HEAD
     if request.user.is_anonymous:
         # TODO: use models to count stats for counters
         context['counters'] = {
@@ -53,3 +54,6 @@ def home_view(request):
         return render(request, 'pages/home/interviewer_home.html', context)
     else:
         return render(request, 'pages/home/visitor_home.html', context)
+=======
+    return render(request, 'pages/icons_test.html', context)
+>>>>>>> parent of 62c95ff... fourth commit

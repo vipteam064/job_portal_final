@@ -1,18 +1,16 @@
-    {% extends 'form_card.html' %}
-{% block title %}
-Sign Up
-{% endblock title %}
+{% extends 'form_card.html' %}
 {% block style %}
-{{ block.super }}
-input[type="radio"]:checked + label {
-    color: #0056b3;
-    font-weight: bold;
-}
+<style>
+  input[type=radio]{
+    transform:scale(1.5);
+  }
+</style>
 {% endblock style %}
 {% block form_title %}
     Sign Up
 {% endblock form_title %}
 {% block form %}
+<<<<<<< HEAD
 <form id="signup_form" method="post">
     {% csrf_token %}
     <div class="form-group text-center">
@@ -59,17 +57,37 @@ input[type="radio"]:checked + label {
     </div>
     <a href="#" class="btn btn-warning">Cancel</a>
     <input type="submit" class="btn btn-success" value="Next"/>
+=======
+<form method="post">
+  {% csrf_token %}
+  <div class="form-group text-center">
+    <input id="role_input" type="radio" name="role" class="mr-1" value="JOB SEEKER" required checked/> Job Seeker
+    <input id="role_input" type="radio" name="role" class="ml-3 mr-1" value="EMPLOYER" required /> Employer
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input id="email_input" type="email" name="email" class="form-control email mb-2" placeholder="abc@gmail.com"
+      pattern="^[\w\.\+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\.\-]+$" title="username@domain.com" required />
+  </div>
+  <div class="form-group">
+    <label>Password:</label>
+    <input id="password_input" type="password" class="form-control password mb-2" placeholder="Enter 8 char password.."
+      name="pwd" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,128}$" title="Password must contain aleast 8 characters, one lowercase letter, one uppercase letter, one number and one special character (@$!%*?&)" required />
+    <input type="checkbox" class="mb-2"  onchange="shPassword()"/> Show password
+  </div>
+  <div class="form-group">
+    <label>Confirm password:</label>
+    <input type="password" class="form-control password mb-3" placeholder="Retype your password !" id="pwd1"
+      name="pwd1" required/>
+  </div>
+  <div class="mb-4">
+    Already have an account?
+    <a href="#">Login</a>
+  </div>
+  <div class="form-group text-center">
+    <a href="#" class="btn sm-btn btn-warning">Cancel</a>
+    <input type="submit" class="btn sm-btn btn-success" value="Sign Up"/>
+  </div>
+>>>>>>> parent of 62c95ff... fourth commit
 </form>
 {% endblock form %}
-{% block script %}
-{{ block.super }}
-function check_password(confirm_password_input) {
-    let password_input = document.getElementById('password_input');
-    if (password_input.value != confirm_password_input.value) {
-        confirm_password_input.setCustomValidity('Password and confirm password don\'t match.');
-    }
-    else {
-        confirm_password_input.setCustomValidity('');
-    }
-}
-{% endblock script %}

@@ -10,10 +10,9 @@
         {% block title %}{% endblock title %}
     </title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    {% comment %}<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">{% endcomment %}
     <link rel="stylesheet" href="{% static 'css/bootstrap-icons.css' %}">
-    <style>
-        {% block style %}{% endblock style %}
-    </style>
+    {% block style %}{% endblock style %}
 
     <script src="{% static 'js/jquery-3.2.1.min.js' %}" charset="utf-8" defer></script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}" charset="utf-8" defer></script>
@@ -31,8 +30,11 @@
             {% include 'navbar/employer_navbar.html' %}
         {% elif user.role.role_name == 'INTERVIEWER' %}
             {% include 'navbar/interviewer_navbar.html' %}
+<<<<<<< HEAD
         {% elif user.role.role_name == 'ADMIN' or user.role.role_name == 'STAFF' %}
             {% include 'navbar/admin_navbar.html' %}
+=======
+>>>>>>> parent of 62c95ff... fourth commit
         {% else %}
             {% include 'navbar/visitor_navbar.html' %}
         {% endif %}
@@ -51,9 +53,6 @@
     {% block footer %}
         {% include 'footer.html' %}
     {% endblock footer %}
-    <script type="text/javascript">
-        {% block script %}{% endblock script %}
-    </script>
 </body>
 
 </html>
