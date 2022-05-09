@@ -12,7 +12,7 @@ Change Email
         <label for="new_email_input">New email:</label>
         <input id="new_email_input" type="email" name="email" class="form-control" placeholder="username@domain.com" pattern="^[\w\.\+\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\.\-]+$" title="username@domain.com" required />
     </div>
-    <a href="#"  class="btn btn-warning">Cancel</a>
+    <a href="{% url 'home' %}"  class="btn btn-warning">Cancel</a>
     <input type="submit" class="btn btn-success" value="Change Email" />
 </form>
 {% endblock form %}

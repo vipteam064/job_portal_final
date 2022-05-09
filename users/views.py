@@ -65,7 +65,7 @@ def login_view(request):
                 if user_account.role.role_name == "ADMIN" or user_account.role.role_name == "STAFF":
                     return redirect('/admin/')
                 else:
-                    return HttpResponse('home')
+                    return redirect('/')
         else:
             context['errors'] = [('__all__', ['Invalid email or password!']), ]
     return render(request, 'users/login.html', context)

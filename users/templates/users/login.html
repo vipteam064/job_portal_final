@@ -31,7 +31,7 @@ Login
         <br>
         New to job portal? <a href="{% url 'users:signup' %}">Sign Up</a>
     </div>
-    <a href="#"  class="btn btn-warning">Cancel</a>
+    <a href="{% url 'home' %}"  class="btn btn-warning">Cancel</a>
     <input type="submit" class="btn btn-success" value="Login" />
 </form>
 {% endblock form %}

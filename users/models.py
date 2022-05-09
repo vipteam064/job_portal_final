@@ -15,7 +15,7 @@ class Role_master(models.Model):
         validators=[
             validators.RegexValidator(
                 regex=r'^(?! )(?:[a-zA-Z]| (?! ))+(?<! )$',
-                message="Role name can contain letters and spaces."
+                message="Role name must contain only letters and spaces."
             ),
         ],
         error_messages={
@@ -25,6 +25,9 @@ class Role_master(models.Model):
 
     def __str__(self):
         return self.role_name
+
+    class Meta:
+        verbose_name = 'Role'
 
 class User_accountManager(BaseUserManager):
     use_in_migrations = True
@@ -112,7 +115,7 @@ class User_account(AbstractBaseUser, PermissionsMixin):
                 if not self.is_staff:
                     error_dict['is_staff'] = 'User of staff role must have is_staff equal to true.'
                 if self.is_superuser:
-                    error_dict['is_superuser'] = 'Invalid permissions for user belonging to role staff.'
+                    error_dict['is_superuser'] = 'Invalid permissions for user belonging to staff role.'
             else:
                 if self.is_staff:
                     error_dict['is_staff'] = 'Invalid permissions for user.'

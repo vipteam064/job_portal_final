@@ -33,23 +33,39 @@ def job_search(request):
 
 # Create your views here.
 def home_view(request):
-    context = {}
+    # TODO: use models to count stats for counters
+    context = {
+        'counters': {
+            'employer_count': 34,
+            'job_seeker_count': 12,
+            'job_post_count': 4,
+            'hired_count': 25,
+        },
+    }
     if request.user.is_anonymous:
-        # TODO: use models to count stats for counters
-        context['counters'] = {
-            'employer_count': 2892,
-            'job_seeker_count': 371,
-            'job_post_count': 356,
-            'hired_count': 903,
-        }
         if request.GET:
             context.update(job_search(request))
         return render(request, 'pages/home/visitor_home.html', context)
     elif request.user.role.role_name == 'JOB SEEKER':
+        if request.GET:
+            context.update(job_search(request))
         return render(request, 'pages/home/job_seeker_home.html', context)
     elif request.user.role.role_name == 'EMPLOYER':
+        context['counters'] = {
+            'job_post_count': 7,
+            'active_post_count': 1,
+            'inactive_post_count': 6,
+        }
         return render(request, 'pages/home/employer_home.html', context)
     elif request.user.role.role_name == 'INTERVIEWER':
+        # context['assigned_interviews'] = [{
+        #     'job_post': {'job_title': 'test job',},
+        #     'interview_name': 'test interview',
+        #     'start_date': 3,
+        #     'end_date': None,
+        #     'related_interview_result': {'count': 5},
+        # },]
+        context['curr_date'] = 4
         return render(request, 'pages/home/interviewer_home.html', context)
     else:
         return render(request, 'pages/home/visitor_home.html', context)

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    {% include 'pages/home/search.html' %}
+    {% comment %}
+    {% include 'pages/search_results.html' %}
+    {% endcomment %}
+    {% if not form.search_keyword and not form.search_location %}
+    <div id="recent_jobs_carousel" class="carousel slide" data-ride="carousel">
+        <div class="row">
+            <h4 class="col-6 mb-0">Recent Jobs</h4>
+            <div class="col-6 text-right">
+                <a class="bi bi-arrow-left-square-fill" href="#recent_jobs_carousel" role="button" data-slide="prev" style="font-size: 1.3rem;"></a>
+                <a class="bi bi-arrow-right-square-fill" href="#recent_jobs_carousel" role="button" data-slide="next" style="font-size: 1.3rem;"></a>
+            </div>
+        </div>
+        <!-- TODO: add job details to cards -->
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="row mx-1">
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello1</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello2</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-0 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello3</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="row mx-1">
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello4</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello5</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-0 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello6</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="row mx-1">
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello7</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-2 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello8</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 mb-0 col-md-4 mb-md-0">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title">hello9</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <hr class="clearfix" style="width: 0px;">
+</div>
+{% endblock content %}
