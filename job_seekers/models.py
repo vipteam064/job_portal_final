@@ -2,18 +2,17 @@ from django.db import models
 from django.db.models import Q
 from django.db.models.deletion import CASCADE, PROTECT
 from django.core import validators
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import datetime
-import users.models as users_models
-import pages.models as pages_models
 from job_portal_final.custom_fields import *
 import job_portal_final.myvalidators as myvalidators
 
 # Create your models here.
 class Job_seeker_profile(models.Model):
-    GENDER_CHOICES = ((True, 'Male'), (False, 'Female'))
+    GENDER_CHOICES = ((False, 'Female'), (True, 'Male'))
     job_seeker = models.OneToOneField(
-        users_models.User_account,
+        'users.User_account',
         limit_choices_to={'role__role_name': 'JOB SEEKER'},
         on_delete=PROTECT,
         primary_key=True
@@ -54,7 +53,7 @@ class Job_seeker_profile(models.Model):
         }
     )
     address = models.TextField(max_length=100)
-    area = models.ForeignKey(pages_models.Area_master, on_delete=PROTECT)
+    area = models.ForeignKey('pages.Area_master', on_delete=PROTECT)
     resume = models.FileField(
         upload_to='resume',
         blank=True,
@@ -68,7 +67,7 @@ class Job_seeker_profile(models.Model):
         blank=True,
         null=True,
     )
-    skill = models.ManyToManyField(pages_models.Skill_master)
+    skill = models.ManyToManyField('pages.Skill_master')
 
     def __str__(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize()
@@ -76,11 +75,11 @@ class Job_seeker_profile(models.Model):
 class Educational_detail(models.Model):
     job_seeker_profile = models.ForeignKey(Job_seeker_profile, on_delete=CASCADE)
     degree = models.ForeignKey(
-        pages_models.Degree_master,
+        'pages.Degree_master',
         limit_choices_to=Q(degree_type__isnull=False) | Q(degree_name='10TH CLASS') | Q(degree_name='12TH CLASS'),
         on_delete=PROTECT
     )
-    institute = models.ForeignKey(pages_models.Institute_master, on_delete=PROTECT)
+    institute = models.ForeignKey('pages.Institute_master', on_delete=PROTECT)
     passing_year = models.PositiveSmallIntegerField(validators=[
         validators.RegexValidator(regex=r'\d{4}', message='Passing year must be in YYYY format.'),
         validators.MaxValueValidator(myvalidators.passing_year_limit_value, message='Passing year must be current year or earlier.'),
@@ -114,7 +113,7 @@ class Educational_detail(models.Model):
                 # NOTE: checking based on predefined degree_name
                 # To check if '10TH CLASS' is done before '12TH CLASS'
                 if self.degree.degree_name == '12TH CLASS':
-                    tenth_educational_details = self.__class__.objects.filter(job_seeker_profile=self.job_seeker_profile, degree__degree_name='10TH CLASS')
+                    tenth_educational_details = Educational_detail.objects.filter(job_seeker_profile=self.job_seeker_profile, degree__degree_name='10TH CLASS')
                     if not tenth_educational_details.exists():
                         error_dict['degree'] = 'Educational details of 10th class must be provided before entering details of 12th class.'
                     elif not (self.passing_year > tenth_educational_details.order_by('passing_year').last().passing_year):
@@ -131,7 +130,7 @@ class Educational_detail(models.Model):
 
     def __str__(self):
         if self.degree.degree_type:
-            return self.degree.degree_type.degree_name + ' OF ' + self.degree.degree_name
+            return f'{self.degree.degree_type.degree_name} OF {self.degree.degree_name} FROM {self.institute.institute_name}'
         else:
             return self.degree.degree_name
 
@@ -141,7 +140,7 @@ class Educational_detail(models.Model):
         ]
 
 class Experience_detail(models.Model):
-    EMPLOYMENT_TYPE_CHOICES = ((True, 'Full-time'), (False, 'Part-time'))
+    EMPLOYMENT_TYPE_CHOICES = ((False, 'Part-time'), (True, 'Full-time'))
     job_seeker_profile = models.ForeignKey(Job_seeker_profile, on_delete=CASCADE)
     company_name = UpperCharField(
         max_length=50,
@@ -188,4 +187,4 @@ class Experience_detail(models.Model):
                 raise ValidationError({'end_date': 'End date must not be proir to start date.'})
 
     def __str__(self):
-        return self.job_title
+        return self.job_title + ' AT ' + self.company_name

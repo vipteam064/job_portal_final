@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.deletion import CASCADE, PROTECT
 from django.contrib.auth.models import BaseUserManager, PermissionsMixin, AbstractBaseUser
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
@@ -81,7 +82,7 @@ class User_account(AbstractBaseUser, PermissionsMixin):
     )
     role = models.ForeignKey(
         Role_master,
-        on_delete=models.PROTECT,
+        on_delete=PROTECT,
         help_text=_('Designates what role the user belongs to.'),
     )
     # related_employer = models.ForeignKey(

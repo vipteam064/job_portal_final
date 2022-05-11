@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'job_seekers',
     'employers',
     'interviews',
-    'exams',
+    # 'exams',
 ]
 
 AUTH_USER_MODEL = 'users.User_account'

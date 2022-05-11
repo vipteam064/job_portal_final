@@ -111,8 +111,7 @@ class Area_master(models.Model):
         verbose_name = 'Area'
 
 class Institute_master(models.Model):
-    INSTITUTE_TYPE_CHOICES = (
-        (False, 'School'), (True, 'College or University'))
+    INSTITUTE_TYPE_CHOICES = ((False, 'School'), (True, 'College or University'))
     institute_name = UpperCharField(
         max_length=60,
         unique=True,
