@@ -1,9 +1,6 @@
 import datetime
 
 # Functions to get values for validation dynamically
-def dob_limit_value():
-    return datetime.date(datetime.date.today().year - 15, 12, 31)
-
 def passing_year_limit_value():
     return datetime.date.today().year
 
@@ -17,6 +14,7 @@ name_regex = r'^(?![ \'()\-\.])(?:[a-zA-Zà-öÀ-Öø-þØ-Þ]|[\'()\-\.](?![\'(
 person_name_regex = r'^(?![ \'\-\.,])(?:[a-zA-Zà-öÀ-Öø-þØ-Þ]|[\'\-\.,](?![\'\-\.,])| (?! ))+(?<![ \'\-,])$'
 # same as name_regex but added , and digits are allowed
 # NOTE: make sure to check that user doesn't enter only digits
+# company_name_regex is also used for exam_name
 company_name_regex = r'^(?![ \'()\-\.,])(?:[a-zA-Zà-öÀ-Öø-þØ-Þ\d]|[\'()\-\.,](?![\'()\-\.,])| (?! ))+(?<![ \'(\-,])$'
 # same as name_regex but added ,
 job_title_regex = r'^(?![ \'()\-\.,\+])(?:[a-zA-Zà-öÀ-Öø-þØ-Þ]|[\'()\-\.,\+](?![\'()\-\.,])| (?! ))+(?<![ \'(\-,])$'

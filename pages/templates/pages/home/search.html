@@ -27,7 +27,7 @@
             Please provide job title, skill, city or state to perform search.
         </div>
     </div>
-    {% if job_search_result %}
+    {% if job_search_results %}
     <div id="search_filters" class="row">
         <div class="col-6 col-md-3">
             <select id="min_salary_input" class="custom-select" name="min_salary" oninput="check_salary()">
@@ -106,7 +106,7 @@
             </select>
         </div>
         <div class="col-6 mt-2 col-md-3">
-            <select id="created_date_input" class="custom-select" name="created_date">
+            <select id="activated_time_input" class="custom-select" name="activated_time">
                 <option value="" selected hidden disabled>Date posted</option>
                 <option value="1">Last 24 hours</option>
                 <option value="3">Last 3 days</option>
@@ -115,7 +115,7 @@
             </select>
         </div>
         <div class="col-12 mt-2">
-            <input id="clear_button" type="submit" value="Clear Filters" class="btn btn-block btn-outline-dark" onclick="clear_filters()">
+            <input id="clear_button" type="submit" value="Clear Filters" class="btn btn-block btn-dark" onclick="clear_filters()">
         </div>
     </div>
     {% endif %}

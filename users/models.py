@@ -16,7 +16,7 @@ class Role_master(models.Model):
         validators=[
             validators.RegexValidator(
                 regex=r'^(?! )(?:[a-zA-Z]| (?! ))+(?<! )$',
-                message="Role name must contain only letters and spaces."
+                message='Role name must contain only letters and spaces.'
             ),
         ],
         error_messages={
@@ -85,15 +85,14 @@ class User_account(AbstractBaseUser, PermissionsMixin):
         on_delete=PROTECT,
         help_text=_('Designates what role the user belongs to.'),
     )
-    # related_employer = models.ForeignKey(
-    #     'Employer_profile',
-    #     blank=True,
-    #     null=True,
-    #     default=None,
-    #     on_delete=models.CASCADE,
-    #     help_text=_(
-    #         'For relating user of interviewer role to an employer profile.')
-    # )
+    related_employer = models.ForeignKey(
+        'employers.Employer_profile',
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.CASCADE,
+        help_text=_('For relating user of interviewer role to an employer profile.')
+    )
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     USERNAME_FIELD = 'email'
@@ -124,10 +123,10 @@ class User_account(AbstractBaseUser, PermissionsMixin):
                     error_dict['is_superuser'] = 'Invalid permissions for user.'
 
             # checking related_employer
-            # if self.role.role_name == 'INTERVIEWER' and self.related_employer is None:
-            #     error_dict['related_employer'] = 'Related employer must be provided for user belonging interviewer role.'
-            # elif self.role.role_name != 'INTERVIEWER' and self.related_employer is not None:
-            #     error_dict['related_employer'] = 'Related employer can only be set for user belonging interviewer role.'
+            if self.role.role_name == 'INTERVIEWER' and self.related_employer is None:
+                error_dict['related_employer'] = 'Related employer must be provided for user belonging interviewer role.'
+            elif self.role.role_name != 'INTERVIEWER' and self.related_employer is not None:
+                error_dict['related_employer'] = 'Related employer can only be set for user belonging interviewer role.'
 
         raise ValidationError(error_dict)
 

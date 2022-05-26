@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'pages',
     'job_seekers',
     'employers',
-    'interviews',
+    # 'interviews',
     # 'exams',
 ]
 

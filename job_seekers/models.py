@@ -5,6 +5,7 @@ from django.core import validators
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import datetime
+from dateutil.relativedelta import relativedelta
 from job_portal_final.custom_fields import *
 import job_portal_final.myvalidators as myvalidators
 
@@ -36,9 +37,7 @@ class Job_seeker_profile(models.Model):
         ]
     )
     gender = models.BooleanField(choices=GENDER_CHOICES)
-    dob = models.DateField(validators=[
-        validators.MaxValueValidator(myvalidators.dob_limit_value, message='Job seeker must be 15 or older.'),
-    ])
+    dob = models.DateField()
     mobile_number = models.CharField(
         max_length=20,
         unique=True,
@@ -68,6 +67,10 @@ class Job_seeker_profile(models.Model):
         null=True,
     )
     skill = models.ManyToManyField('pages.Skill_master')
+
+    def clean(self):
+        if relativedelta(datetime.date.today(), self.dob).years < 15:
+            raise ValidationError({'dob': 'Job seeker must be 15 years or older.'})
 
     def __str__(self):
         return self.first_name.capitalize() + ' ' + self.last_name.capitalize()

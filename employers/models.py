@@ -31,6 +31,7 @@ class Employer_profile(models.Model):
                 message='Company name must contain only letters, digits, spaces, \' (apostrophes), () (parenthesis), - (hyphens), , (commas) and . (full-stops).'
             ),
         ],
+
         error_messages={
             'unique': _('A company with that name already exists.'),
         }
@@ -52,7 +53,6 @@ class Employer_profile(models.Model):
     )
     address = models.TextField(max_length=100)
     area = models.ForeignKey('pages.Area_master', on_delete=PROTECT)
-    has_active_subscription = models.BooleanField(default=False)
     company_website = models.URLField()
     mobile_number = models.CharField(
         max_length=20,
@@ -98,8 +98,8 @@ class Subscription(models.Model):
             validators.MinValueValidator(decimal.Decimal('0'), message='Amount must be greater than 0.'),
         ]
     )
-    successful = models.BooleanField(default=False)
-    end_date = models.DateField(blank=True, null=True)
+    successful = models.BooleanField()
+    end_date = models.DateField()
 
 class Job_post(models.Model):
     JOB_TYPE_CHOICES = ((False, 'Part-time'), (True, 'Full-time'))
@@ -146,20 +146,19 @@ class Job_post(models.Model):
 
     def clean(self):
         error_dict = {}
-        if subscription.end_date < datetime.date.today():
+        if self.subscription.end_date < datetime.date.today():
             error_dict['__all__'] = 'Please subscribe to a membership to post a job.'
 
-        if Job_post.objects.filter(subscription=self.subscription).count() >= subscription.membership.number_of_post:
-            error_dict['__all__'] = 'You have reached the job post limit for currently subscribed membership.'
+        if Job_post.objects.filter(subscription=self.subscription).count() >= self.subscription.membership.number_of_post:
+            error_dict['__all__'] = 'You have reached the job post limit for the currently subscribed membership.'
 
-        if not (self.min_salary is None or self.max_salary is None):
-            if self.min_salary > self.max_salary:
-                error_dict['min_salary'] = 'Minimum salary must be less than or equal to maximum salary.'
-                error_dict['max_salary'] = 'Maximum salary must be greater than or equal to minimum salary.'
+        if self.min_salary > self.max_salary:
+            error_dict['min_salary'] = 'Minimum salary must be less than or equal to maximum salary.'
+            error_dict['max_salary'] = 'Maximum salary must be greater than or equal to minimum salary.'
 
         if self.id and self.req_qualification.filter(degree_type__isnull=True).exists():
             invalid_req_qualifications = self.req_qualification.filter(degree_type__isnull=True).values_list('degree_name')
-            invalid_req_qualifications_str = ", ".join([str(i[0]) for i in invalid_req_qualifications])
+            invalid_req_qualifications_str = ', '.join([str(i[0]) for i in invalid_req_qualifications])
             error_dict['req_qualification'] = f'Required qualifications must be degrees. {invalid_req_qualifications_str} {"is" if len(invalid_req_qualifications) == 1 else "are"} invalid.'
 
         if hasattr(self, 'min_edu') and self.min_edu.degree_type is not None:
@@ -187,24 +186,23 @@ class Job_post(models.Model):
         return str(self.job_title)
 
 class Application(models.Model):
-    APPLICATION_STATUS_CHOICES = (('00', 'Pending'), ('01', 'Denied'), ('10', 'Accepted'), ('11', 'Hired'))
+    APPLICATION_STATUS_CHOICES = ((1, 'Pending'), (2, 'Denied'), (3, 'Accepted'), (4, 'Hired'))
     job_post = models.ForeignKey(Job_post, on_delete=PROTECT)
     job_seeker_profile = models.ForeignKey('job_seekers.Job_seeker_profile', on_delete=PROTECT)
     employer_profile = models.ForeignKey(Employer_profile, on_delete=PROTECT)
     application_date = models.DateField(auto_now_add=True)
-    application_status = models.BinaryField(max_length=2, default=b'00', choices=APPLICATION_STATUS_CHOICES)
+    application_status = models.PositiveSmallIntegerField(default=1, choices=APPLICATION_STATUS_CHOICES)
 
     def clean(self):
-        error_dict = {}
         try:
             old_application = Application.objects.get(id=self.id)
             if old_application.application_status != self.application_status:
-                if not((old_application.application_status == '00' and self.application_status != '11') or (old_application.application_status == '10' and self.application_status == '11')):
-                    error_dict['status'] = f'Application with status of {old_application.get_application_status_display()} can\'t be set to {self.get_application_status_display()}.'
+                if not((old_application.application_status == 1 and self.application_status != 4) or (old_application.application_status == 3 and self.application_status == 4)):
+                    raise ValidationError({
+                        'status': f'Application with status of {old_application.get_application_status_display()} can\'t be set to {self.get_application_status_display()}.'
+                    })
         except Application.DoesNotExist:
             pass
-
-        raise ValidationError(error_dict)
 
     class Meta:
         constraints = [

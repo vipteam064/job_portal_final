@@ -146,11 +146,15 @@ class Degree_master(models.Model):
     )
     degree_type = models.ForeignKey(
         'self',
-        limit_choices_to=Q(degree_type__isnull=True) & ~Q(degree_name__in=['10TH CLASS', '12TH CLASS']),
         blank=True,
         null=True,
         on_delete=PROTECT
     )
+
+    def clean(self):
+        valid_degree_types = Degree_master.objects.filter(Q(degree_type__isnull=True) & ~Q(degree_name__in=['10TH CLASS', '12TH CLASS']))
+        if hasattr(self, 'degree_type') and self.degree_type not in valid_degree_types:
+            raise ValidationError({'degree_type': f'Degree type should be one of the following - {", ".join([str(i) for i in valid_degree_types])}.'})
 
     def __str__(self):
         if self.degree_type:

@@ -2,9 +2,9 @@
 {% block content %}
 <div class="container">
     {% include 'pages/home/search.html' %}
-    {% comment %}
-    {% include 'pages/search_results.html' %}
-    {% endcomment %}
+    {% if job_search_results is not None %}
+        {% include 'pages/home/search_results.html' %}
+    {% endif %}
     {% if not form.search_keyword and not form.search_location %}
     <div id="recent_jobs_carousel" class="carousel slide" data-ride="carousel">
         <div class="row">
